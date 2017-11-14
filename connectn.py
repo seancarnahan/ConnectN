@@ -23,6 +23,8 @@ def main():
     board = create_list(num_of_rows, num_of_columns, board)
     board.reverse()
 
+
+
     play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_player_one)
 
 
@@ -40,7 +42,9 @@ def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win,
             break
 
 
+        #the below is the method that is causing board to return none
         board = update_board(board, player_move, is_player_one)
+
         display_board(num_of_rows, num_of_columns, board)
 
 
@@ -54,7 +58,9 @@ def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win,
 def update_board(board, player_move, is_player_one) -> list:
     #this method is under the assumption that the move entered is valid and there is room in that column
     #^ might change and might wanna place that check in this method and handle the error with an exception
-    pass
+
+    #left off on this method try to add the update here
+
 
 
 
@@ -111,8 +117,9 @@ def get_move(num_of_columns) -> int:
 
 
 def is_game_over() -> bool:
-    #should return true if a player won or if its a cats game
-    pass
+    if game_won() or is_tie_game():
+        pass
+
 
 
 def game_won() -> bool:
@@ -125,7 +132,8 @@ def game_won() -> bool:
         game_checker = True
     else:
         pass
-        # maybe check for cats game here but not sure yet
+
+
 
 
 def row_win() -> bool:
@@ -181,7 +189,7 @@ def create_list(num_of_rows, num_of_columns, board) -> list:
 
 
 def display_board(num_of_rows, num_of_columns, board) -> None:
-
+    print(board)
     print("  ", end="")
     for i in range(num_of_columns):
         print(i, end=" ")
@@ -189,7 +197,7 @@ def display_board(num_of_rows, num_of_columns, board) -> None:
     current_row = num_of_rows - 1
     for x in range(num_of_rows):
         print(current_row, end=" ")
-        print(board)
+
         for item in board[x]:
             print(item, end = " ")
 
