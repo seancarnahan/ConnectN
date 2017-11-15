@@ -5,10 +5,7 @@ of pieces in a row needed to win are user parameters. If you have never played C
  https://www.mathsisfun.com/games/connect4.html. The basic gist of the game is that each player takes a turn dropping one of
  their pieces into a column. Pieces land on top of pieces already played in that column. Each player is trying to get n pieces in
  a row either veritcally, horizontally or diagonally. The game ends if either player gets n pieces in a row or the board becomes full.
-
-
 """
-
 def main():
     is_first_player = True
     board = []
@@ -22,24 +19,14 @@ def main():
 
     board = create_list(num_of_rows, num_of_columns, board)
 
-    #board.reverse()
-
-
-
     play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_first_player)
 
-
-
-
 def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_first_player):
-    while not is_game_over():
-
+    while True:
         while True:
             player_move = get_move(num_of_columns)
             if not is_column_full(board, player_move, num_of_rows):
                 break
-        #board[3][2] = "t"
-
 
         column_position = spot_in_column(board, num_of_rows, player_move)
 
@@ -53,20 +40,16 @@ def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win,
         else:
             player = "2"
 
-
-        if game_won():
+        if game_won(board, number_of_pieces_in_a_row_to_win):
             print("Player",player,"won!")
             break
-        elif is_game_over():
+        elif is_tie_game(board):
             print("Tie Game")
             break
 
         is_first_player = not is_first_player
 
-
-
 def update_board(board, player_move, is_first_player, column_position) -> list:
-
     game_piece = ""
 
     if is_first_player:
@@ -76,8 +59,6 @@ def update_board(board, player_move, is_first_player, column_position) -> list:
 
     board[column_position][player_move] = game_piece
     return board
-
-
 
 def display_board(num_of_rows, num_of_columns, board) -> None:
     print("  ", end="")
@@ -90,12 +71,8 @@ def display_board(num_of_rows, num_of_columns, board) -> None:
 
         for item in board[x]:
             print(item, end = " ")
-
         print("")
-
-
         current_row -= 1
-
 
 def is_column_full(board, player_move, num_of_rows) -> bool:
     is_full = False
@@ -103,18 +80,13 @@ def is_column_full(board, player_move, num_of_rows) -> bool:
     for i in range(num_of_rows - 1 , -1, -1):
         if board[i][player_move] == "*":
             return is_full
-
     return True
-
 
 def spot_in_column(board, num_of_rows, player_move) -> int:
     #return the row in which is open
-
     for i in range(num_of_rows -1, -1, -1):
         if board[i][player_move] == "*":
             return i
-
-
 
 def get_move(num_of_columns) -> int:
     #this returns a valid player move
@@ -132,68 +104,58 @@ def get_move(num_of_columns) -> int:
         else:
             continue
 
-
-
-
-
-
-
-def is_game_over() -> bool:
-    if game_won() or is_tie_game():
-        pass
-
-def game_won() -> bool:
+def game_won(board, number_of_pieces_in_a_row_to_win) -> bool:
     game_checker = False
-    if row_win():
+    if row_win(board, number_of_pieces_in_a_row_to_win):
         game_checker = True
-    elif col_win():
+    elif col_win(board number_of_pieces_in_a_row_to_win):
         game_checker = True
-    elif diag_win():
+    elif diag_win(board, number_of_pieces_in_a_row_to_win):
         game_checker = True
 
     return game_checker
 
+def row_win(board, number_of_pieces_in_a_row_to_win) -> bool:
+    to_win = number_of_pieces_in_a_row_to_win
 
-def row_win() -> bool:
+    for i in board[]
+
+
+
+def col_win(board, number_of_pieces_in_a_row_to_win) -> bool:
     pass
 
 
-def col_win() -> bool:
-    pass
-
-
-def diag_win() -> bool:
+def diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
     diag_win_checker = False
-    if right_diag_win():
+    if right_diag_win(board, number_of_pieces_in_a_row_to_win):
         diag_win_checker = True
-    elif left_diag_win():
+    elif left_diag_win(board, number_of_pieces_in_a_row_to_win):
         diag_win_checker = True
 
     return diag_win_checker
 
 
-def right_diag_win() -> bool:
+def right_diag_win(board,number_of_pieces_in_a_row_to_win) -> bool:
     pass
 
 
-def left_diag_win() -> bool:
-    pass
-
-
-def is_tie_game() -> bool:
-    #check to see if there are any astericks in board
+def left_diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
     pass
 
 
 
 
-
-
-
+def is_tie_game(board) -> bool:
+    is_tie = True
+    for row in range(len(board)):
+        for pos in board[row]:
+            if pos == "*":
+                is_tie = False
+    return is_tie
 
 def create_list(num_of_rows, num_of_columns, board) -> list:
     # creates a list of astericks, basically the same thing as make empty board but in list form
-
     for i in range(num_of_rows):
         board.append([])
 
@@ -202,34 +164,6 @@ def create_list(num_of_rows, num_of_columns, board) -> list:
             column.append("*")
 
     return board
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def make_empty_board(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win) -> None:
     #creates an empty connectn board
@@ -248,7 +182,6 @@ def make_empty_board(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_w
         print("")
 
         current_row -= 1
-
 
 def get_game_attributes() -> list:
     #returns a list of the game attributes such as num of rows,columns and how many pieces in a row to win
@@ -289,7 +222,6 @@ def get_game_attributes() -> list:
 
     return rows_columns_win_dependency
 
-
 def is_int_greater_than_0(number) -> bool:
     #checks if user input is int greater than 0
     try:
@@ -310,7 +242,5 @@ def is_int(number):
         return False
     return True
 
-
 if __name__ == "__main__":
     main()
-    #create_list(5,6,[])
