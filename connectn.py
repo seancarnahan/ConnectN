@@ -40,7 +40,7 @@ def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win,
         else:
             player = "2"
 
-        if game_won(board, number_of_pieces_in_a_row_to_win):
+        if game_won(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns):
             print("Player",player,"won!")
             break
         elif is_tie_game(board):
@@ -104,11 +104,11 @@ def get_move(num_of_columns) -> int:
         else:
             continue
 
-def game_won(board, number_of_pieces_in_a_row_to_win) -> bool:
+def game_won(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns) -> bool:
     game_checker = False
     if row_win(board, number_of_pieces_in_a_row_to_win):
         game_checker = True
-    elif col_win(board number_of_pieces_in_a_row_to_win):
+    elif col_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns):
         game_checker = True
     elif diag_win(board, number_of_pieces_in_a_row_to_win):
         game_checker = True
@@ -117,13 +117,50 @@ def game_won(board, number_of_pieces_in_a_row_to_win) -> bool:
 
 def row_win(board, number_of_pieces_in_a_row_to_win) -> bool:
     to_win = number_of_pieces_in_a_row_to_win
+    did_win = False
 
-    for i in board[]
+    for row in board:
+        checker = 0
+        for pos in row:
+            if pos == "X":
+                checker += 1
+            if checker == to_win:
+                did_win = True
+    for row in board:
+        checker = 0
+        for pos in row:
+            if pos == "O":
+                checker += 1
+            if checker == to_win:
+                did_win = True
 
+    return did_win
 
+"""
+    for i in range(num_of_rows -1, -1, -1):
+        if board[i][player_move] == "*":
+            return i
+"""
+def col_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns) -> bool:
+    to_win = number_of_pieces_in_a_row_to_win
+    did_win = False
 
-def col_win(board, number_of_pieces_in_a_row_to_win) -> bool:
-    pass
+    for col in range(num_of_columns):
+        checker = 0
+        for i in range(num_of_rows - 1, -1, -1):
+            if board[i][col] == "X":
+                checker +=1
+            if checker == to_win:
+                did_win = True
+
+    for col in range(num_of_columns):
+        checker = 0
+        for i in range(num_of_rows - 1, -1, -1):
+            if board[i][col] == "O":
+                checker +=1
+            if checker == to_win:
+                did_win = True
+    return did_win
 
 
 def diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
@@ -193,7 +230,6 @@ def get_game_attributes() -> list:
             continue
         else:
             number_of_rows = int(number_of_rows)
-
         break
 
     while True:
@@ -203,7 +239,6 @@ def get_game_attributes() -> list:
             continue
         else:
             number_of_columns = int(number_of_columns)
-
         break
 
     while True:
