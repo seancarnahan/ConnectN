@@ -10,7 +10,7 @@ of pieces in a row needed to win are user parameters. If you have never played C
 """
 
 def main():
-    is_player_one = True
+    is_first_player = True
     board = []
 
     rows_columns_win_dependency = get_game_attributes()
@@ -21,94 +21,116 @@ def main():
     make_empty_board(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win)
 
     board = create_list(num_of_rows, num_of_columns, board)
-    board.reverse()
+
+    #board.reverse()
 
 
 
-    play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_player_one)
+    play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_first_player)
 
 
 
 
-def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_player_one):
-
+def play_connectn(num_of_rows, num_of_columns, number_of_pieces_in_a_row_to_win, board, is_first_player):
     while not is_game_over():
 
         while True:
             player_move = get_move(num_of_columns)
-            if is_valid_move():
+            if not is_column_full(board, player_move, num_of_rows):
                 break
-            #adding break for right now
-            break
+        #board[3][2] = "t"
 
 
-        #the below is the method that is causing board to return none
-        board = update_board(board, player_move, is_player_one)
+        column_position = spot_in_column(board, num_of_rows, player_move)
+
+        update_board(board, player_move, is_first_player, column_position)
 
         display_board(num_of_rows, num_of_columns, board)
 
-
-        # check winner
-
-
-
-
-
-
-def update_board(board, player_move, is_player_one) -> list:
-    #this method is under the assumption that the move entered is valid and there is room in that column
-    #^ might change and might wanna place that check in this method and handle the error with an exception
-
-    #left off on this method try to add the update here
+        player = ""
+        if is_first_player == True:
+            player = "1"
+        else:
+            player = "2"
 
 
+        if game_won():
+            print("Player",player,"won!")
+            break
+        elif is_game_over():
+            print("Tie Game")
+            break
 
-
+        is_first_player = not is_first_player
 
 
 
-def is_valid_move() -> bool:
+def update_board(board, player_move, is_first_player, column_position) -> list:
 
-    # add counter to see if there is even any room on the board
-    pass
+    game_piece = ""
+
+    if is_first_player:
+        game_piece = "X"
+    else:
+        game_piece = "O"
+
+    board[column_position][player_move] = game_piece
+    return board
+
+
+
+def display_board(num_of_rows, num_of_columns, board) -> None:
+    print("  ", end="")
+    for i in range(num_of_columns):
+        print(i, end=" ")
+    print("")
+    current_row = num_of_rows - 1
+    for x in range(num_of_rows):
+        print(current_row, end=" ")
+
+        for item in board[x]:
+            print(item, end = " ")
+
+        print("")
+
+
+        current_row -= 1
+
+
+def is_column_full(board, player_move, num_of_rows) -> bool:
+    is_full = False
+
+    for i in range(num_of_rows - 1 , -1, -1):
+        if board[i][player_move] == "*":
+            return is_full
+
+    return True
+
+
+def spot_in_column(board, num_of_rows, player_move) -> int:
+    #return the row in which is open
+
+    for i in range(num_of_rows -1, -1, -1):
+        if board[i][player_move] == "*":
+            return i
 
 
 
 def get_move(num_of_columns) -> int:
     #this returns a valid player move
-    #not fully done yet because u need to check if the column is full first, prob need more info
-    #use is valid move to help with above comment
-    #there are some problems with this method -> LIKE WHEN you enter the max column it gives an error
 
     while True:
         move = input("Enter the column you want to play in: ")
 
-        if not is_int_greater_than_0(move):
+        if not is_int(move):
             continue
         else:
             move = int(move)
 
         if 0 <= move or move <= num_of_columns - 1:
             return move
-
         else:
-            print("check2")
             continue
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -120,8 +142,6 @@ def is_game_over() -> bool:
     if game_won() or is_tie_game():
         pass
 
-
-
 def game_won() -> bool:
     game_checker = False
     if row_win():
@@ -130,10 +150,8 @@ def game_won() -> bool:
         game_checker = True
     elif diag_win():
         game_checker = True
-    else:
-        pass
 
-
+    return game_checker
 
 
 def row_win() -> bool:
@@ -172,14 +190,15 @@ def is_tie_game() -> bool:
 
 
 
+
 def create_list(num_of_rows, num_of_columns, board) -> list:
     # creates a list of astericks, basically the same thing as make empty board but in list form
 
-    for i in range(num_of_columns):
+    for i in range(num_of_rows):
         board.append([])
 
     for column in board:
-        for row in range(num_of_rows + 1):
+        for row in range(num_of_columns):
             column.append("*")
 
     return board
@@ -188,23 +207,26 @@ def create_list(num_of_rows, num_of_columns, board) -> list:
 
 
 
-def display_board(num_of_rows, num_of_columns, board) -> None:
-    print(board)
-    print("  ", end="")
-    for i in range(num_of_columns):
-        print(i, end=" ")
-    print("")
-    current_row = num_of_rows - 1
-    for x in range(num_of_rows):
-        print(current_row, end=" ")
-
-        for item in board[x]:
-            print(item, end = " ")
-
-        print("")
 
 
-        current_row -= 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -280,6 +302,14 @@ def is_int_greater_than_0(number) -> bool:
         return True
     else:
         return False
+
+def is_int(number):
+    try:
+        int(number)
+    except ValueError:
+        return False
+    return True
+
 
 if __name__ == "__main__":
     main()
