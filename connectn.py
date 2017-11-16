@@ -110,7 +110,7 @@ def game_won(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_column
         game_checker = True
     elif col_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns):
         game_checker = True
-    elif diag_win(board, number_of_pieces_in_a_row_to_win):
+    elif diag_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns):
         game_checker = True
 
     return game_checker
@@ -136,11 +136,6 @@ def row_win(board, number_of_pieces_in_a_row_to_win) -> bool:
 
     return did_win
 
-"""
-    for i in range(num_of_rows -1, -1, -1):
-        if board[i][player_move] == "*":
-            return i
-"""
 def col_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns) -> bool:
     to_win = number_of_pieces_in_a_row_to_win
     did_win = False
@@ -163,9 +158,9 @@ def col_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns
     return did_win
 
 
-def diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
+def diag_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns) -> bool:
     diag_win_checker = False
-    if right_diag_win(board, number_of_pieces_in_a_row_to_win):
+    if right_diag_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns):
         diag_win_checker = True
     elif left_diag_win(board, number_of_pieces_in_a_row_to_win):
         diag_win_checker = True
@@ -173,8 +168,34 @@ def diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
     return diag_win_checker
 
 
-def right_diag_win(board,number_of_pieces_in_a_row_to_win) -> bool:
-    pass
+def right_diag_win(board, number_of_pieces_in_a_row_to_win, num_of_rows, num_of_columns) -> bool:
+    did_win = False
+    for row in range(num_of_rows -1, -1, -1):
+
+        for col in range(num_of_columns):
+            checker = 0
+            n = 1
+            if board[row][col] == "X":
+                checker += 1
+                while checker < number_of_pieces_in_a_row_to_win:
+                    if board[row - n][col + n] == "X":
+                        print("row - n: ", end=" ")
+                        print(row - n)
+                        checker +=1
+                        n += 1
+                    else:
+                        break
+                if checker == number_of_pieces_in_a_row_to_win:
+                    print(checker)
+                    did_win = True
+                    break
+        if did_win == True:
+            break
+    #print(did_win)
+    return did_win
+
+
+
 
 
 def left_diag_win(board, number_of_pieces_in_a_row_to_win) -> bool:
